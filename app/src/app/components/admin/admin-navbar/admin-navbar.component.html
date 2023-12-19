@@ -1,10 +1,19 @@
 <nav class="bg-gradient-to-r from-indigo-500 to-sky-500">
     <div class="h-16 px-32 text-gray-100 flex items-center w-full flex">
-        <div class="text-xl flex items-center">
+        <a class="text-xl flex items-center" [routerLink]="['/admin']">
             Online Recipe Book
             <span class="ms-2 text-xs bg-slate-950 px-2 py-1 rounded-2xl">Admin Site</span>
+        </a>
+
+        <div *ngIf="isLogin" class="flex items-center grow">
+            <div class="ms-6">
+                <a class="ms-8 hover:text-gray-200 cursor-pointer" [routerLink]="['/admin/user']">User</a>
+                <a class="ms-8 hover:text-gray-200 cursor-pointer" [routerLink]="['/admin/category']">Category</a>
+                <a class="ms-8 hover:text-gray-200 cursor-pointer" [routerLink]="['/admin/recipe']">Recipe</a>
+            </div>
+
+            <a class="ml-auto hover:text-gray-200 cursor-pointer" (click)="logout()">Logout</a>
         </div>
 
-        <a *ngIf="isLogin" class="ml-auto hover:text-gray-200 cursor-pointer" (click)="logout()">Logout</a>
     </div>
 </nav>
