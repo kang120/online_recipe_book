@@ -7,15 +7,17 @@ import { AdminHomeComponent } from './components/admin/admin-home/admin-home.com
 import { AdminUserComponent } from './components/admin/admin-user/admin-user.component';
 import { AdminCategoryComponent } from './components/admin/admin-category/admin-category.component';
 import { AdminRecipeComponent } from './components/admin/admin-recipe/admin-recipe.component';
+import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
     { path: '', component: NavbarComponent },
-    { path: 'admin', component: AdminHomeComponent },
-    { path: 'admin/login', component: AdminLoginComponent },
-    { path: 'admin/home', component: AdminHomeComponent },
-    { path: 'admin/user', component: AdminUserComponent },
-    { path: 'admin/category', component: AdminCategoryComponent },
-    { path: 'admin/recipe', component: AdminRecipeComponent }
+    { path: 'login', component: LoginComponent },
+    //{ path: 'admin', component: AdminHomeComponent },
+    //{ path: 'admin/login', component: AdminLoginComponent },
+    //{ path: 'admin/home', component: AdminHomeComponent },
+    //{ path: 'admin/user', component: AdminUserComponent },
+    //{ path: 'admin/category', component: AdminCategoryComponent },
+    //{ path: 'admin/recipe', component: AdminRecipeComponent }
 ];
 
 @NgModule({

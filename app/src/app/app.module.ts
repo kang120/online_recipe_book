@@ -11,7 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AdminHomeComponent } from './components/admin/admin-home/admin-home.component';
 import { AdminUserComponent } from './components/admin/admin-user/admin-user.component';
 import { AdminCategoryComponent } from './components/admin/admin-category/admin-category.component';
-import { AdminRecipeComponent } from './components/admin/admin-recipe/admin-recipe.component'
+import { AdminRecipeComponent } from './components/admin/admin-recipe/admin-recipe.component';
+import { LoginComponent } from './components/login/login.component'
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { AdminRecipeComponent } from './components/admin/admin-recipe/admin-reci
         AdminHomeComponent,
         AdminUserComponent,
         AdminCategoryComponent,
-        AdminRecipeComponent
+        AdminRecipeComponent,
+        LoginComponent
     ],
     imports: [
         BrowserModule,
