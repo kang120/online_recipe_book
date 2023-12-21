@@ -12,7 +12,8 @@ import { AdminHomeComponent } from './components/admin/admin-home/admin-home.com
 import { AdminUserComponent } from './components/admin/admin-user/admin-user.component';
 import { AdminCategoryComponent } from './components/admin/admin-category/admin-category.component';
 import { AdminRecipeComponent } from './components/admin/admin-recipe/admin-recipe.component';
-import { LoginComponent } from './components/login/login.component'
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component'
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import { LoginComponent } from './components/login/login.component'
         AdminUserComponent,
         AdminCategoryComponent,
         AdminRecipeComponent,
-        LoginComponent
+        LoginComponent,
+        RegisterComponent
     ],
     imports: [
         BrowserModule,

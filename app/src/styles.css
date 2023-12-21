@@ -6,10 +6,24 @@
 body {
     width: 100vw;
     height: 100vh;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 @layer components {
     .navbar {
         @apply hover:text-white cursor-pointer;
+    }
+
+    .btn {
+        @apply rounded px-4 py-2
+    }
+
+    .btn-blue {
+        @apply bg-blue-600 hover:bg-blue-700 text-slate-50
+    }
+
+    .link {
+        @apply text-blue-600 hover:text-blue-800 underline
     }
 }

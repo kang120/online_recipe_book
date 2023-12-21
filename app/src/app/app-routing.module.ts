@@ -8,10 +8,12 @@ import { AdminUserComponent } from './components/admin/admin-user/admin-user.com
 import { AdminCategoryComponent } from './components/admin/admin-category/admin-category.component';
 import { AdminRecipeComponent } from './components/admin/admin-recipe/admin-recipe.component';
 import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
     { path: '', component: NavbarComponent },
     { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent },
     //{ path: 'admin', component: AdminHomeComponent },
     //{ path: 'admin/login', component: AdminLoginComponent },
     //{ path: 'admin/home', component: AdminHomeComponent },
