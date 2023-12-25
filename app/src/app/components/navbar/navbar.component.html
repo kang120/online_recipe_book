@@ -1,11 +1,27 @@
 <nav class="bg-gray-800">
-    <div class="h-16 px-32 flex items-center">
-        <div class="text-slate-50 text-2xl">GroupForge</div>
+    <div class="w-full px-10 flex flex-col tems-center sm:flex-row md:px-20 2xl:px-32">
+        <div class="w-full h-16 text-slate-50 text-2xl flex items-center sm:w-auto">
+            <div>
+                GroupForge
+            </div>
 
-        <div class="text-gray-400 flex space-x-8 items-center ms-16">
-            <a class="navbar">Home</a>
-            <a class="navbar">Task</a>
-            <a class="navbar">About</a>
+            <div class="text-gray-400 ms-auto sm:hidden" (click)="toggleNavbar()">
+                <fa-icon [icon]="faBars" class="text-slate-50 text-2xl"></fa-icon>
+            </div>
+        </div>
+
+        <div id="navbarCollapse" class="w-full pt-2 pb-5 hidden sm:flex sm:py-0">
+            <div class="w-full text-gray-400 items-center ms-0 flex flex-col sm:ms-10 sm:flex-row md:ms-16">
+                <div class="w-full flex flex-col text-center sm:space-x-8 sm:flex-row sm:text-start sm:w-auto">
+                    <a class="navbar active">Home</a>
+                    <a class="navbar">Task</a>
+                    <a class="navbar">About</a>
+                </div>
+
+                <div *ngIf="isAuth" class="text-gray-400 ms-0 text-center mt-2 sm:text-start sm:ms-auto sm:mt-0">
+                    <a class="navbar" (click)="logout()">Logout</a>
+                </div>
+            </div>
         </div>
     </div>
 </nav>

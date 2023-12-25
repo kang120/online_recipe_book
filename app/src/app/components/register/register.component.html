@@ -1,42 +1,129 @@
 <div class="flex flex-col h-full">
     <app-navbar></app-navbar>
 
-    <div class="flex items-center w-full grow">
-        <div class="w-2/5 px-32 py-16 ">
-            <form>
+    <div class="flex items-center w-full grow relative justify-center lg:justify-start">
+        <div class="w-full sm:w-2/3 lg:w-2/5 px-8 lg:px-16 2xl:px-28 py-16">
+            <div *ngIf="errorMessage != ''" class="rounded border border-red-500 bg-red-100 px-4 py-3 mb-10">{{
+                errorMessage }}</div>
+
+            <form *ngIf="!isVerifying; else verification" [formGroup]="registerForm"
+                (ngSubmit)="onRegisterFormSubmit()">
                 <div class="text-4xl font-medium">Register</div>
 
                 <div>
-                    <input class="mt-12 text-sm rounded w-full" type="email" placeholder="email" />
+                    <input class="mt-12 text-sm rounded w-full" type="email" placeholder="email" formControlName="email"
+                        [ngClass]="{'border border-red-600': registerForm.controls['email'].errors && registerFormSubmitted}" />
+                    <span
+                        *ngIf="registerForm.controls['email'].errors?.['required'] && registerFormSubmitted; else checkEmailFormat"
+                        class="text-xs text-red-600">
+                        This field is required
+                    </span>
+                    <ng-template #checkEmailFormat>
+                        <span *ngIf="registerForm.controls['email'].errors?.['email'] && registerFormSubmitted"
+                            class="text-xs text-red-600">
+                            Email format is invalid
+                        </span>
+                    </ng-template>
                 </div>
 
                 <div>
-                    <input class="mt-3 text-sm rounded w-full" type="text" placeholder="username" />
+                    <input class="mt-3 text-sm rounded w-full" type="text" placeholder="username"
+                        formControlName="username"
+                        [ngClass]="{'border border-red-600': registerForm.controls['username'].errors && registerFormSubmitted}" />
+                    <span
+                        *ngIf="registerForm.controls['username'].errors?.['required'] && registerFormSubmitted; else checkUsernameLength"
+                        class="text-xs text-red-600">
+                        This field is required
+                    </span>
+                    <ng-template #checkUsernameLength>
+                        <span
+                            *ngIf="(registerForm.controls['username'].errors?.['minlength'] || registerForm.controls['username'].errors?.['maxlength']) && registerFormSubmitted"
+                            class="text-xs text-red-600">
+                            Length must between 8-20
+                        </span>
+                    </ng-template>
                 </div>
 
                 <div>
-                    <input class="mt-3 text-sm rounded w-full" type="password" placeholder="password" />
+                    <input class="mt-3 text-sm rounded w-full" type="password" placeholder="password"
+                        formControlName="password"
+                        [ngClass]="{'border border-red-600': registerForm.controls['password'].errors && registerFormSubmitted}" />
+                    <span *ngIf="registerForm.controls['password'].errors?.['required'] && registerFormSubmitted"
+                        class="text-xs text-red-600">
+                        This field is required
+                    </span>
                 </div>
 
                 <div>
-                    <input class="mt-3 text-sm rounded w-full" type="password" placeholder="confirmed password" />
+                    <input class="mt-3 text-sm rounded w-full" type="password" placeholder="confirmed password"
+                        formControlName="confirmedPassword"
+                        [ngClass]="{'border border-red-600': registerForm.controls['confirmedPassword'].errors && registerFormSubmitted}" />
+                    <span
+                        *ngIf="registerForm.controls['confirmedPassword'].errors?.['required'] && registerFormSubmitted; else checkSamePassword"
+                        class="text-xs text-red-600">
+                        This field is required
+                    </span>
+                    <ng-template #checkSamePassword>
+                        <span *ngIf="registerForm.hasError('passwordMismatch') && registerFormSubmitted"
+                            class="text-xs text-red-600">
+                            Passwords are not same
+                        </span>
+                    </ng-template>
                 </div>
 
                 <div class="mt-4 flex">
                     <button class="btn btn-blue ms-auto">Sign up</button>
                 </div>
+
+                <hr class="mt-4" />
+
+                <div class="flex items-center">
+                    <div>Have your own account?</div>
+                    <a class="link ms-4" [routerLink]="['/login']">Sign in</a>
+                </div>
             </form>
 
-            <hr class="mt-4" />
+            <ng-template #verification>
+                <form [formGroup]="verificationForm" (ngSubmit)="onVerificationFormSubmit()">
+                    <div class="text-4xl font-medium">Email Verification</div>
+                    <div class="mt-8">We have sent a 6 digis verification code to your email</div>
 
-            <div class="flex items-center">
-                <div>Have your own account?</div>
-                <a class="link ms-4" [routerLink]="['/login']">Sign in</a>
-            </div>
+                    <div class="flex items-center mt-5">
+                        <div class="flex items-center border w-2/3 xl:w-1/2"
+                            [ngClass]="verificationForm.controls['verificationCode'].errors && verificationFormSubmitted ? 'border-red-600' : 'border-slate-900'">
+                            <div class="bg-slate-100 px-2 py-1 text-lg text-slate-500 h-full">@</div>
+
+                            <input formControlName="verificationCode" type="text"
+                                class="h-full border-0 grow focus:ring-0 w-full" maxlength="6"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                        </div>
+
+                        <div class="ms-6">
+                            <a [ngClass]="resendEnable ? 'link' : 'text-slate-400'" (click)="onResend()">resend</a>
+                            <span *ngIf="!resendEnable" class="ms-3">{{ resendCountdown }}</span>
+                        </div>
+                    </div>
+
+                    <span
+                        *ngIf="verificationForm.controls['verificationCode'].errors?.['required'] && verificationFormSubmitted"
+                        class="text-xs text-red-600">
+                        This field is required
+                    </span>
+
+                    <div class="mt-4 flex flex-col xl:flex-row xl:items-end">
+                        <div>
+                            <span class="italic">{{verificationEmail}}</span>
+                            <a class="link ms-4" (click)="reset()">Not you?</a>
+                        </div>
+                        <button class="btn btn-blue mt-8 xl:ms-auto xl:mt-0" type="submit">Submit</button>
+                    </div>
+                </form>
+            </ng-template>
         </div>
 
-        <div class="bg-gradient-to-r from-blue-500 to-cyan-500 w-3/5 flex justify-center px-28 py-20 h-full">
-            <img src="../../../assets/img/group.png" class="max-h-full w-3/4" />
+        <div
+            class="absolute end-0 top-0 bg-gradient-to-r from-blue-500 to-cyan-500 hidden lg:block w-3/5 flex justify-center h-full px-14 py-10">
+            <img src="../../../assets/img/group.png" class="max-h-full h-full" />
         </div>
     </div>
 </div>

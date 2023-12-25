@@ -6,59 +6,67 @@ import { MailService } from 'src/app/services/mail.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-    selector: 'app-register',
-    templateUrl: './register.component.html',
-    styleUrls: ['./register.component.css']
+    selector: 'app-reset-password',
+    templateUrl: './reset-password.component.html',
+    styleUrls: ['./reset-password.component.css']
 })
-export class RegisterComponent {
+export class ResetPasswordComponent {
 
-    registerForm!: FormGroup;
-    registerFormSubmitted: boolean = false;
+    emailForm!: FormGroup;
+    emailFormSubmitted: boolean = false;
 
     isVerifying: boolean = false;
     verificationForm!: FormGroup;
     verificationFormSubmitted: boolean = false;
 
+    isResetting: boolean = false;
+    resetForm!: FormGroup;
+    resetFormSubmitted: boolean = false;
+
     errorMessage: string = '';
 
-    verificationEmail: string = 'leeweikang1220@gmail.com';
-    verificationCode!: string;
+    resetEmail: string = 'leeweikang1220@gmail.com';
+    resetId!: number;
+    verificationCode: string = '';
 
     resendEnable: boolean = true;
     resendCountdown: number = 59;
     resendInterval: any;
 
-    constructor(private formBuilder: FormBuilder, private mailService: MailService, private router: Router, private userService: UserService) { }
+
+    constructor(private formBuilder: FormBuilder, private mailService: MailService, private userService: UserService, private router: Router) { }
 
     ngOnInit() {
-        this.registerForm = this.formBuilder.group({
-            email: ['', [Validators.required, Validators.email]],
-            username: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
-            password: ['', [Validators.required]],
-            confirmedPassword: ['', Validators.required]
-        }, {
-            validator: passwordMatchValidator
+        this.emailForm = this.formBuilder.group({
+            email: ['', [Validators.required, Validators.email]]
         })
 
         this.verificationForm = this.formBuilder.group({
             verificationCode: ['', [Validators.required]],
         })
+
+        this.resetForm = this.formBuilder.group({
+            password: ['', [Validators.required]],
+            confirmedPassword: ['', Validators.required]
+        }, {
+            validator: passwordMatchValidator
+        })
     }
 
-    onRegisterFormSubmit() {
-        this.registerFormSubmitted = true;
+    onEmailFormSubmit() {
+        this.emailFormSubmitted = true;
 
-        if (!this.registerForm.valid) {
+        if (!this.emailForm.valid) {
             return;
         }
 
-        const email = this.registerForm.controls['email'].value;
-        const username = this.registerForm.controls['username'].value;
+        const email = this.emailForm.controls['email'].value;
 
-        this.userService.checkNewUserValid(email, username).subscribe(res => {
+        this.userService.checkEmailExist(email).subscribe(res => {
             if (res.result == 'success') {
                 this.errorMessage = '';
-                this.verificationEmail = email;
+                this.resetEmail = email;
+                this.resetId = Number(res.data);
                 this.isVerifying = true;
 
                 this.sendEmail();
@@ -79,24 +87,35 @@ export class RegisterComponent {
 
         if (inputCode == this.verificationCode) {
             this.errorMessage = '';
-            const email = this.registerForm.controls['email'].value;
-            const username = this.registerForm.controls['username'].value;
-            const password = this.registerForm.controls['password'].value;
+            this.isVerifying = false;
+            this.isResetting = true;
 
-            this.userService.addNewUser(email, username, password).subscribe(res => {
-                if (res.result == 'success') {
-                    const message = 'Successfully create account';
-
-                    this.router.navigate(['/login'], { queryParams: { message } })
-                }
-            })
+            // reset password
         } else {
             this.errorMessage = 'Invalid code'
         }
     }
 
+    onResetFormSubmit() {
+        this.resetFormSubmitted = true;
+
+        if (!this.resetForm.valid) {
+            return;
+        }
+
+        const password = this.resetForm.controls['password'].value;
+
+        this.userService.resetPassword(this.resetId, password).subscribe(res => {
+            if (res.result == 'success') {
+                const message = 'Successfully reset password';
+
+                this.router.navigate(['/login'], { queryParams: { message } })
+            }
+        })
+    }
+
     sendEmail() {
-        this.mailService.sendVerificationEmail(this.verificationEmail).subscribe(res => {
+        this.mailService.sendResetPasswordEmail(this.resetEmail).subscribe(res => {
             if (res.result == 'success') {
                 this.verificationCode = res.data;
             }
@@ -119,11 +138,7 @@ export class RegisterComponent {
     }
 
     reset() {
-        this.errorMessage = '';
+        this.errorMessage = ''
         this.isVerifying = false;
-    }
-
-    getRange(n: number): number[] {
-        return Array.from({ length: n }, (_, index) => index + 1);
     }
 }

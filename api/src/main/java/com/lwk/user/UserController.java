@@ -2,31 +2,49 @@ package com.lwk.user;
 
 import java.util.List;
 
+import com.lwk.request_body.AuthRequest;
+import com.lwk.response_body.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin
 public class UserController {
-	
-	private final UserService userService;
-	
-	@Autowired
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
+
+    @Autowired
+	private UserService userService;
+
+
+	public UserController() {}
 
 	@GetMapping
 	public List<User> getUsers() {
 		return userService.getUsers();
 	}
-	
+
 	@PostMapping
-	public void addUser(@RequestBody User user) {
-		userService.addUser(user);
+	public UserResponse addUser(@RequestBody User user) {
+		return userService.addUser(user);
 	}
+
+    @PostMapping("/verify_new_user")
+    public UserResponse verifyNewUser(@RequestBody User user) {
+        return userService.verifyNewUser(user);
+    }
+
+    @PostMapping("/check_email_exist")
+    public UserResponse checkEmailExist(@RequestBody String email){
+        return userService.checkEmailExist(email);
+    }
+
+    @PutMapping("/reset_password/{id}")
+    public UserResponse resetPassword(@PathVariable Long id, @RequestBody String password){
+        return userService.resetPassword(id, password);
+    }
+
+    @PostMapping("/auth")
+    public UserResponse auth(@RequestBody AuthRequest authRequest){
+        return userService.auth(authRequest);
+    }
 }
