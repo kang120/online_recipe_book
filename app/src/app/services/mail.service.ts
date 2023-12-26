@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BASE_API_URL } from '../constants';
-import { MailResponse } from '../interfaces/mail-response';
+import { MailResponse } from '../interfaces/response/mail-response';
 import { Observable } from 'rxjs';
 
 @Injectable({

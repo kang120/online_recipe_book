@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BASE_API_URL } from '../constants';
 import { Observable } from 'rxjs';
-import { UserResponse } from '../interfaces/user-response';
+import { UserResponse } from '../interfaces/response/user-response';
 
 @Injectable({
     providedIn: 'root'

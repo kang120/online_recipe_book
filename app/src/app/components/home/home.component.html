@@ -1,7 +1,7 @@
 <div class="flex flex-col h-full relative">
     <app-navbar></app-navbar>
 
-    <div class="flex items-center w-full grow">
+    <div id="main" class="flex items-center w-full grow">
         <div class="w-full h-full px-32 py-16 bg-slate-50 flex flex-col justify-center items-center border-r">
             You haven't joined any group yet
             <div class="flex">
@@ -22,31 +22,36 @@
     </div>
 
     <div id="createForm"
-        class="modal show fixed w-2/3 top-1/2 start-1/2 -translate-x-1/2 -translate-y-2/3 shadow-lg bg-gray-200 px-8 py-6 rounded">
+        class="modal show fixed w-2/3 top-1/2 start-1/2 -translate-x-1/2 -translate-y-2/3 border shadow-lg bg-gray-50 px-8 py-6 rounded">
         <div class="flex items-center">
             <div class="text-2xl">Create new group</div>
             <fa-icon class="ms-auto text-3xl cursor-pointer hover:text-red-600" [icon]="faXmark"
                 (click)="toggleForm('create')"></fa-icon>
         </div>
 
-        <div class="h-72 mt-12 grid grid-cols-3 gap-2 overflow-auto shadow-sm">
+        <div class="max-h-72 mt-12 grid grid-cols-3 gap-2 overflow-auto shadow-sm">
             <div *ngFor="let category of groupCategories"
-                class="border border-gray-300 rounded-lg px-5 py-4 cursor-pointer hover:bg-gray-300 shadow-md">
+                class="border border-gray-300 rounded-lg px-5 py-4 cursor-pointer hover:bg-gray-100 shadow-md"
+                (click)="selectGroupCategory(category.id)"
+                [ngClass]="selectedCategoryId == category.id ? 'bg-gray-100 border-green-800 border-2' : ''">
                 <div class="font-bold">{{ category.categoryName }}</div>
                 <div class="text-slate-600 text-sm mt-4">{{ category.description }}</div>
             </div>
         </div>
 
         <div class="w-full mt-12 flex flex-col items-center">
-            <div class="w-2/3 text-sm flex">
-                <select class="cursor-pointer rounded-l border-r-0">
-                    <option>Private group</option>
-                    <option>Public group</option>
+            <div class="w-2/3 text-sm grid grid-cols-12">
+                <select class="cursor-pointer rounded-l border-r-0 col-span-3" (change)="changeGroupType($event)">
+                    <option value="public">Public group</option>
+                    <option value="private">Private group</option>
                 </select>
-                <input class="grow rounded-r" type="text" [(ngModel)]="groupName" placeholder="Group Name" />
+                <input class="grow" [ngClass]="isPrivate ? 'col-span-5 border-r-0' : 'col-span-9 rounded-r'" type="text"
+                    [(ngModel)]="groupName" placeholder="Group Name" />
+                <input *ngIf="isPrivate" class="grow rounded-r col-span-4 rounded-r-0" type="password"
+                    [(ngModel)]="groupName" placeholder="Password" />
             </div>
-            
-            <span class="text-red-400 mt-4">{{ groupNameError }}</span>
+
+            <span class="text-red-400 mt-4">{{ errorMessage }}</span>
             <button class="btn btn-blue mt-4" (click)="createGroup()">Create</button>
         </div>
     </div>
