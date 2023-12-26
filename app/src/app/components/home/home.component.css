@@ -1,0 +1,12 @@
+.modal {
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    transition: all .5s ease-in-out !important;
+}
+
+.show {
+    opacity: 1;
+    pointer-events: all;
+    transform: translate(-50%, -50%);
+}

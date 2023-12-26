@@ -15,7 +15,7 @@ body {
         @apply w-full hover:text-white cursor-pointer mt-2 sm:mt-0;
     }
 
-    .active{
+    .active {
         @apply bg-gray-900 text-slate-50 sm:bg-transparent;
     }
 
@@ -27,11 +27,25 @@ body {
         @apply bg-blue-600 hover:bg-blue-700 text-slate-50
     }
 
-    .btn-black{
+    .btn-black {
         @apply bg-slate-800 hover:bg-slate-950 text-slate-50
     }
 
     .link {
         @apply text-blue-600 hover:text-blue-800 underline cursor-pointer
     }
+}
+
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 6px;
 }
